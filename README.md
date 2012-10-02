@@ -1,4 +1,4 @@
-mynote.vim
+mnote.vim
 ==========
 
 建設予定地
@@ -60,5 +60,5 @@ or recache tags on write each time.
 variables
 ---------
 
-- g:mynote_data_path = ''
+- g:mnote_data_path = ''
 
