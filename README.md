@@ -1,4 +1,4 @@
-mnote.vim
+knowto.vim
 ==========
 
 建設予定地
