@@ -57,3 +57,8 @@ or recache tags on write each time.
       echo call getftime(f)
     endfor
 
+variables
+---------
+
+- g:mynote_data_path = ''
+
