@@ -12,19 +12,12 @@ function! s:unite_source.gather_candidates(args, context)
   let ret = []
   for val in s:find_pages()
     let candidate = {
-        \ "abbr"         : val.name ,
+        \ "abbr"         : val.name . ' [' . join(note#tags(val.path), ',') . ']' ,
         \ "word"         : val.name ,
-        \ "source"       : "uiki",
+        \ "source"       : "note",
         \ "kind"         : "file" ,
         \ "action__path" : val.path ,
         \ }
-    let keys = split(val.name, '_')
-    if len(keys) == 3
-     let candidate.abbr = s:padding("[" . keys[1] . "]", 5) . " " . s:padding(keys[2], 32)
-     if keys[0] != "00000000"
-       let candidate.abbr .= " " . strpart(keys[0], 4, 2) . '/' . strpart(keys[0], 6, 2)
-     endif
-    endif
     call add(ret, candidate)
   endfor
   return ret
@@ -32,12 +25,12 @@ endfunction
 " new page
 function! s:unite_source.change_candidates(args, context)
   let page = substitute(a:context.input, '\*', '', 'g')
-  let path = expand(g:unite_uiki_path . '/' . page . '.uiki' , ':p')
+  let path = expand(g:unite_uiki_path . '/' . page . '.mn' , ':p')
   if page != '' && !filereadable(path)
     return [{
           \ 'abbr'         : '[new page] ' . page ,
           \ 'word'         : page   ,
-          \ "source"       : "uiki" ,
+          \ "source"       : "note" ,
           \ "kind"         : "file" ,
           \ "action__path" : path   ,
           \ }]
@@ -49,7 +42,7 @@ endfunction
 " find pages
 "
 function! s:find_pages()
-  return reverse(map(split(globpath(g:unite_uiki_path , '*.uiki') , '\n') , '{
+  return reverse(map(split(globpath(note#data_path(), '*.mn') , '\n') , '{
           \ "name" : fnamemodify(v:val , ":t:r") ,
           \ "path" : v:val
           \ }'))
