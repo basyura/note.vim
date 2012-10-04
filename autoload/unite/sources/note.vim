@@ -12,8 +12,7 @@ function! s:unite_source.gather_candidates(args, context)
   let ret = []
   for val in s:find_pages()
     let candidate = {
-        \ "abbr"         : val.name . ' [' . join(note#tags(val.path), ',') . ']' ,
-        \ "word"         : val.name ,
+        \ "word"         : s:padding(val.name, 50) . ' ' . join(note#tags(val.path), ', ') ,
         \ "source"       : "note",
         \ "kind"         : "file" ,
         \ "action__path" : val.path ,
@@ -51,7 +50,7 @@ endfunction
 
 function! s:padding(msg, len)
   let msg = a:msg
-  while strwidth(msg) < a:len
+  while strdisplaywidth(msg) < a:len
     let msg .= ' '
   endwhile
   return msg
