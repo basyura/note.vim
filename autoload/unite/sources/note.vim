@@ -42,7 +42,7 @@ endfunction
 " find pages
 "
 function! s:find_pages()
-  return reverse(map(split(globpath(note#data_path(), '*.mn') , '\n') , '{
+  return reverse(map(note#list(), '{
           \ "name" : fnamemodify(v:val , ":t:r") ,
           \ "path" : v:val
           \ }'))
