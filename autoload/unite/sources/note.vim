@@ -11,20 +11,25 @@ let s:unite_source = {
 function! s:unite_source.gather_candidates(args, context)
   let ret = []
   for val in s:find_pages()
+    let word = s:padding(val.name, 50) . ' ' . s:padding(val.date, 12) . join(val.tags, ', ')
     let candidate = {
-        \ "word"         : s:padding(val.name, 50) . ' ' . join(note#tags(val.path), ', ') ,
-        \ "source"       : "note",
-        \ "kind"         : "file" ,
-        \ "action__path" : val.path ,
+        \ "word"          : word ,
+        \ "source"        : "note",
+        \ "kind"          : "file" ,
+        \ "action__path"  : val.path ,
+        \ "source__ftime" : getftime(val.path)
         \ }
     call add(ret, candidate)
   endfor
+
+  call sort(ret, "unite#sources#note#ftime_sort")
+
   return ret
 endfunction
 " new page
 function! s:unite_source.change_candidates(args, context)
   let page = substitute(a:context.input, '\*', '', 'g')
-  let path = expand(g:unite_uiki_path . '/' . page . '.mn' , ':p')
+  let path = expand(note#data_path() . '/' . page . '.mn' , ':p')
   if page != '' && !filereadable(path)
     return [{
           \ 'abbr'         : '[new page] ' . page ,
@@ -41,10 +46,14 @@ endfunction
 " find pages
 "
 function! s:find_pages()
-  return reverse(map(note#list(), '{
+  let list = map(note#list(), '{
           \ "name" : fnamemodify(v:val , ":t:r") ,
           \ "path" : v:val
-          \ }'))
+          \ }')
+  for page in list
+    call extend(page, note#attributes(page.path))
+  endfor
+  return list
 endfunction
 
 
@@ -54,4 +63,9 @@ function! s:padding(msg, len)
     let msg .= ' '
   endwhile
   return msg
+endfunction
+
+function! unite#sources#note#ftime_sort(i1, i2)
+  return  a:i1.source__ftime == a:i2.source__ftime ? 0 
+           \ : a:i1.source__ftime > a:i2.source__ftime ? -1 : 1
 endfunction

@@ -32,6 +32,36 @@ function! note#tags(file_path)
   return list
 endfunction
 
+function! note#attributes(file_path)
+
+  let attributes = {
+        \ 'date' : '',
+        \ 'tags' : [],
+        \ 'prot' : 5,
+        \ }
+
+  let header = readfile(a:file_path, '', 4)
+  if len(header) < 4 | return attributes | endif
+
+  for line in header
+    if line =~ '^date : '
+      let attributes['date'] = substitute(line, '^date : ', '', '')
+    elseif line =~ '^tags : '
+      let line = substitute(line, '^tags : ', '', '')
+      let tags = []
+      for t in split(line, ',')
+        let tag = substitute(substitute(t, '^\s\+', '', ''), '\s\+$', '', '')
+        call add(tags, tag)
+      endfor
+      let attributes['tags'] = tags
+    elseif line =~ '^prot : '
+      let attributes['prot'] = substitute(line, '^prot : ', '', '')
+    endif
+  endfor
+
+  return attributes
+endfunction
+
 
 function! note#recache()
   let cache = {}
