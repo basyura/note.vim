@@ -9,12 +9,11 @@ augroup note
 augroup END
 
 function! s:open_outline()
-  return
   if exists('b:note_outline')
     return
   endif
   let b:note_outline = 1
   :Unite outline -vertical -no-quit -winwidth=30 -no-start-insert
   execute 'wincmd p'
+  unlet b:note_outline
 endfunction
-
