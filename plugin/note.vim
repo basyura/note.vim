@@ -13,7 +13,8 @@ function! s:open_outline()
     return
   endif
   let b:note_outline = 1
-  :Unite outline -vertical -no-quit -winwidth=30 -no-start-insert
+  let cmd = ':Unite outline -vertical -no-quit -winwidth=50 -winheight=' . winheight(0)  . ' -no-start-insert'
+  execute cmd
   execute 'wincmd p'
   unlet b:note_outline
 endfunction
