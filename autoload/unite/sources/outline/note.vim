@@ -28,7 +28,7 @@ endfunction
 " markdown
 "
 let s:outline_info = {
-      \ 'heading'  : '^#\+',
+      \ 'heading'  : '^#\+\|^\s\=★.\=',
       \ 'heading+1': '^[-=]\+$',
       \ }
 
@@ -40,9 +40,13 @@ function! s:outline_info.create_heading(which, heading_line, matched_line, conte
         \ }
 
   if a:which ==# 'heading'
-    let heading.level = strlen(matchstr(a:heading_line, '^#\+'))
-    let heading.word = substitute(heading.word, '^#\+\s*', '', '')
-    let heading.word = substitute(heading.word, '\s*#\+\s*$', '', '')
+    if a:heading_line =~ '^\s\=★.\='
+      let heading.level = 4
+    else
+      let heading.level = strlen(matchstr(a:heading_line, '^#\+'))
+      let heading.word = substitute(heading.word, '^#\+\s*', '', '')
+      let heading.word = substitute(heading.word, '\s*#\+\s*$', '', '')
+    endif
   elseif a:which ==# 'heading+1'
     if a:matched_line =~ '^='
       let heading.level = 1
