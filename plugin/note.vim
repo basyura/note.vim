@@ -9,6 +9,9 @@ augroup note
 augroup END
 
 function! s:open_outline()
+  if &columns < 150
+    return
+  endif
   if exists('b:note_outline')
     return
   endif
