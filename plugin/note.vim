@@ -19,5 +19,5 @@ function! s:open_outline()
   let cmd = ':Unite outline -vertical -no-quit -winwidth=50 -winheight=' . winheight(0)  . ' -no-start-insert'
   execute cmd
   execute 'wincmd p'
-  unlet b:note_outline
+  "unlet b:note_outline
 endfunction
