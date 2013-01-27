@@ -5,7 +5,7 @@ au BufRead,BufNewFile *.mn set filetype=note
 
 augroup note
   autocmd!
-  autocmd BufReadPost *.mn call s:open_outline()
+"  autocmd BufReadPost *.mn call s:open_outline()
 augroup END
 
 function! s:open_outline()
@@ -16,7 +16,7 @@ function! s:open_outline()
     return
   endif
   let b:note_outline = 1
-  let cmd = ':Unite outline -vertical -no-quit -winwidth=50 -winheight=' . winheight(0)  . ' -no-start-insert'
+  let cmd = ':Unite outline -vertical -no-quit -winwidth=30 -winheight=' . winheight(0)  . ' -no-start-insert -direction=rightbelow -hide-source-names'
   execute cmd
   execute 'wincmd p'
   "unlet b:note_outline
