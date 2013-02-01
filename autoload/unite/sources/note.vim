@@ -76,7 +76,8 @@ function! s:unite_source.action_table.execute.func(candidate)
   silent edit  `=a:candidate.action__path`
   call append(0, [
         \'# ' . a:candidate.word,
-        \'tags : '
+        \'date : ' . strftime('%Y-%m-%d'),
+        \'tags : ',
         \ ])
   silent delete _
   startinsert!
