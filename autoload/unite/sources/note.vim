@@ -6,6 +6,8 @@ endfunction
 let s:unite_source = {
       \ 'name'           : 'note' ,
       \ 'description'    : 'candidates from note' ,
+      \ 'action_table'   : {},
+      \ 'default_action' : {'common' : 'execute'},
       \ }
 " create list
 function! s:unite_source.gather_candidates(args, context)
@@ -35,7 +37,6 @@ function! s:unite_source.change_candidates(args, context)
           \ 'abbr'         : '[new page] ' . page ,
           \ 'word'         : page   ,
           \ "source"       : "note" ,
-          \ "kind"         : "file" ,
           \ "action__path" : path   ,
           \ }]
   else
@@ -68,4 +69,15 @@ endfunction
 function! unite#sources#note#ftime_sort(i1, i2)
   return  a:i1.source__ftime == a:i2.source__ftime ? 0 
            \ : a:i1.source__ftime > a:i2.source__ftime ? -1 : 1
+endfunction
+
+let s:unite_source.action_table.execute = {'description' : 'create new note'}
+function! s:unite_source.action_table.execute.func(candidate)
+  silent edit  `=a:candidate.action__path`
+  call append(0, [
+        \'# ' . a:candidate.word,
+        \'tags : '
+        \ ])
+  silent delete _
+  startinsert!
 endfunction
