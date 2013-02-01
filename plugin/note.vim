@@ -1,12 +1,12 @@
 
 " ftdetect ?
-au BufRead,BufNewFile *.mn set filetype=note
+au BufRead,BufNewFile *.mn :call s:note_settings()
 
-
-augroup note
-  autocmd!
-"  autocmd BufReadPost *.mn call s:open_outline()
-augroup END
+function s:note_settings()
+  set filetype=note
+  " autocmd BufReadPost *.mn call s:open_outline()
+  nnoremap <silent> <buffer> <C-a> :call unite#sources#note_action#start()<CR>
+endfunction
 
 function! s:open_outline()
   if &columns < 150

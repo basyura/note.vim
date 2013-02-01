@@ -82,3 +82,14 @@ function! s:unite_source.action_table.execute.func(candidate)
   silent delete _
   startinsert!
 endfunction
+
+
+let s:unite_source.action_table.delete = {'description' : 'delete note'}
+function! s:unite_source.action_table.delete.func(candidate)
+  if input('delete "' . fnamemodify(a:candidate.action__path, ':t:r') . '" ? (y/n) : ') != 'y'
+    return
+  endif
+  call delete(a:candidate.action__path)
+  redraw
+  echo 'deleted'
+endfunction
