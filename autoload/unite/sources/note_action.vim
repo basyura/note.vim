@@ -17,14 +17,14 @@ function! unite#sources#note_action#start()
     return ''
   endif
   return unite#start(['note/action'], {
-        \ 'winheight'         : '5', 
+        \ 'winheight'         : '7', 
         \ 'hide-source-names' : '1'
         \ })
 endfunction
 
 function! s:unite_source.gather_candidates(args, context)
   let ret = []
-  for val in ['archive', 'delete']
+  for val in ['archive', 'rename', 'delete']
     let candidate = {
         \ "word"          : val,
         \ "action__path"  : expand("%:p") ,
@@ -41,11 +41,25 @@ function! s:unite_source.action_table.execute.func(candidate)
 endfunction
 
 function! s:archive_action(candidate)
-  let path  = expand("%:p:h") . "/archive/" . expand("%")
+  let path = expand("%:p:h") . "/archive/" . expand("%")
   call writefile(readfile(expand("%")), path)
   call delete(a:candidate.action__path)
   bd
   echohl ErrorMsg | echo 'archived ' . fnamemodify(path, ':t:r')  | echohl None
+endfunction
+
+function! s:rename_action(candidate)
+  echohl ErrorMsg | let fname = input('rename to : ', expand("%:t:r"))  | echohl None
+  let fname .= '.mn'
+  if filereadable(fname)
+    echohl ErrorMsg | echo fname . ' is already exists.'  | echohl None
+    return
+  endif
+  call rename(expand("%"), fname)
+  bd
+  execute 'open ' . fname
+  redraw
+  echohl ErrorMsg | echo 'saved as ... ' . fname  | echohl None
 endfunction
 
 function! s:delete_action(candidate)
