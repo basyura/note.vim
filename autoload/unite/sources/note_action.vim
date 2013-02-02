@@ -24,7 +24,7 @@ endfunction
 
 function! s:unite_source.gather_candidates(args, context)
   let ret = []
-  for val in ['delete']
+  for val in ['archive', 'delete']
     let candidate = {
         \ "word"          : val,
         \ "action__path"  : expand("%:p") ,
@@ -36,20 +36,27 @@ endfunction
 
 let s:unite_source.action_table.execute = {'description' : 'note actions'}
 function! s:unite_source.action_table.execute.func(candidate)
-  if a:candidate.word == 'delete'
-    call s:delete_action(a:candidate)
-  endif
+  let word = a:candidate.word
+  call call('s:' . word . '_action', [a:candidate])
+endfunction
+
+function! s:archive_action(candidate)
+  let path  = expand("%:p:h") . "/archive/" . expand("%")
+  call writefile(readfile(expand("%")), path)
+  call delete(a:candidate.action__path)
+  bd
+  echohl ErrorMsg | echo 'archived ' . fnamemodify(path, ':t:r')  | echohl None
 endfunction
 
 function! s:delete_action(candidate)
-  echohl ErrorMsg | let ret = input('delete "' . fnamemodify(a:candidate.action__path, ':t:r') . '" ? (y/n) : ')  | echohl None
+  let path = a:candidate.action__path
+  echohl ErrorMsg | let ret = input('delete ... "' . fnamemodify(path, ':t:r') . '" ? (y/n) : ')  | echohl None
   if ret != 'y'
     redraw
     echo 'canceled'
     return
   endif
-  redraw
-  call delete(a:candidate.action__path)
-  echo 'deleted'
-  bd!
+  call delete(path)
+  bd
+  echohl ErrorMsg | echo 'deleted ... ' . fnamemodify(path, ':t:r')  | echohl None
 endfunction
