@@ -3,8 +3,14 @@ function! note#data_path()
   return expand(g:note_data_path)
 endfunction
 
-function! note#list()
-  let list = split(glob(note#data_path() . "/*.mn"), "\n")
+function! note#list(...)
+  let path = note#data_path()
+  if a:0 
+    if a:1 == 'note/archive'
+      let path .= '/archive'
+    endif
+  endif
+  let list = split(glob(path . "/*.mn"), "\n")
   return list
 endfunction
 

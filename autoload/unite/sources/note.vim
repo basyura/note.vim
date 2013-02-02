@@ -1,18 +1,14 @@
+let s:save_cpo = &cpo
+set cpo&vim
 
-function! unite#sources#note#define()
-  return s:unite_source
-endfunction
-"
-let s:unite_source = {
-      \ 'name'           : 'note' ,
-      \ 'description'    : 'candidates from note' ,
-      \ 'action_table'   : {},
-      \ 'default_action' : {'common' : 'execute'},
-      \ }
+let s:source = {
+\   'action_table': {},
+\ }
 " create list
-function! s:unite_source.gather_candidates(args, context)
+function! s:source.gather_candidates(args, context)
+  let source = a:context.source.name
   let ret = []
-  for val in s:find_pages()
+  for val in s:find_pages(source)
     let word = s:padding(val.name, 50) . ' ' . s:padding(val.date, 12) . join(val.tags, ', ')
     let candidate = {
         \ "word"          : word ,
@@ -29,7 +25,7 @@ function! s:unite_source.gather_candidates(args, context)
   return ret
 endfunction
 " new page
-function! s:unite_source.change_candidates(args, context)
+function! s:source.change_candidates(args, context)
   let page = substitute(a:context.input, '\*', '', 'g')
   let path = expand(note#data_path() . '/' . page . '.mn' , ':p')
   if page != '' && !filereadable(path)
@@ -43,11 +39,55 @@ function! s:unite_source.change_candidates(args, context)
     return []
   endif
 endfunction
+
+let s:source.action_table.execute = {'description' : 'create new note'}
+function! s:source.action_table.execute.func(candidate)
+  silent edit  `=a:candidate.action__path`
+  call append(0, [
+        \'# ' . a:candidate.word,
+        \'date : ' . strftime('%Y-%m-%d'),
+        \'tags : ',
+        \ ])
+  silent delete _
+  startinsert!
+endfunction
+
+
+let s:source.action_table.delete = {'description' : 'delete note'}
+function! s:source.action_table.delete.func(candidate)
+  if input('delete "' . fnamemodify(a:candidate.action__path, ':t:r') . '" ? (y/n) : ') != 'y'
+    return
+  endif
+  call delete(a:candidate.action__path)
+  redraw
+  echo 'deleted'
+endfunction
+
+
+function! unite#sources#note#define()
+  let sources = []
+  for name in ['note', 'note/archive']
+    let source = {
+              \ 'name'           : name ,
+              \ 'description'    : 'candidates from ' . name,
+              \ 'default_action' : {'common' : 'execute'},
+              \ }
+    call add(sources, extend(source, copy(s:source)))
+  endfor
+  return sources
+endfunction
+
+
+function! unite#sources#note#ftime_sort(i1, i2)
+  return  a:i1.source__ftime == a:i2.source__ftime ? 0 
+           \ : a:i1.source__ftime > a:i2.source__ftime ? -1 : 1
+endfunction
+
 "
 " find pages
 "
-function! s:find_pages()
-  let list = map(note#list(), '{
+function! s:find_pages(source)
+  let list = map(note#list(a:source), '{
           \ "name" : fnamemodify(v:val , ":t:r") ,
           \ "path" : v:val
           \ }')
@@ -66,30 +106,5 @@ function! s:padding(msg, len)
   return msg
 endfunction
 
-function! unite#sources#note#ftime_sort(i1, i2)
-  return  a:i1.source__ftime == a:i2.source__ftime ? 0 
-           \ : a:i1.source__ftime > a:i2.source__ftime ? -1 : 1
-endfunction
-
-let s:unite_source.action_table.execute = {'description' : 'create new note'}
-function! s:unite_source.action_table.execute.func(candidate)
-  silent edit  `=a:candidate.action__path`
-  call append(0, [
-        \'# ' . a:candidate.word,
-        \'date : ' . strftime('%Y-%m-%d'),
-        \'tags : ',
-        \ ])
-  silent delete _
-  startinsert!
-endfunction
-
-
-let s:unite_source.action_table.delete = {'description' : 'delete note'}
-function! s:unite_source.action_table.delete.func(candidate)
-  if input('delete "' . fnamemodify(a:candidate.action__path, ':t:r') . '" ? (y/n) : ') != 'y'
-    return
-  endif
-  call delete(a:candidate.action__path)
-  redraw
-  echo 'deleted'
-endfunction
+let &cpo = s:save_cpo
+unlet s:save_cpo
