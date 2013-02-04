@@ -9,7 +9,7 @@ function! s:source.gather_candidates(args, context)
   let source = a:context.source.name
   let ret = []
   for val in s:find_pages(source)
-    let word = s:padding(val.name, 40) . ' ' . s:padding(val.date, 12) . join(val.tags, ', ')
+    let word = s:padding(val.name, 50) . ' ' . s:padding(val.date, 12) . join(val.tags, ', ')
     let candidate = {
         \ "word"          : word ,
         \ "source"        : "note",
