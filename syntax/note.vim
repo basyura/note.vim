@@ -122,8 +122,8 @@ syntax match note_strong "\*\*.\{-1,}\*\*" contains=note_strong_mark
 syntax match note_strong_mark /\*\*/ contained conceal
 "syntax match note_highlight "\~\~.\{-1,}\~\~" contains=note_highlight_mark
 "syntax match note_highlight_mark /\~\~/ contained conceal
-syntax match note_highlight "\#\#.\{-1,}\#\#" contains=note_highlight_mark
-syntax match note_highlight_mark /\#\#/ contained conceal
+syntax match note_highlight "#[^\#]\+#" contains=note_highlight_mark
+syntax match note_highlight_mark /\#/ contained conceal
 
 highlight note_strong guifg=red
 highlight note_star  guifg=#ff9be8
