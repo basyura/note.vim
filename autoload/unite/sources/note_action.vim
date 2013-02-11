@@ -59,7 +59,14 @@ endfunction
 "
 "
 function! s:archive_action(candidate)
-  let path = expand("%:p:h") . "/archive/" . expand("%")
+
+  let archive_dir = expand(g:note_data_path) . '/archive'
+
+  if !isdirectory(archive_dir)
+    call mkdir(archive_dir)
+  endif
+
+  let  path = archive_dir . "/" . expand("%")
   call writefile(readfile(expand("%")), path)
   call delete(a:candidate.action__path)
   bd
