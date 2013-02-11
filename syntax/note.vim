@@ -24,7 +24,8 @@ syn match noteValid '&\%(#\=\w*;\)\@!'
 syn match noteLineStart "^[<@]\@!" nextgroup=@noteBlock
 
 syn cluster noteBlock contains=noteH1,noteH2,noteH3,noteH4,noteH5,noteH6,noteBlockquote,noteListMarker,noteOrderedListMarker,noteCodeBlock,noteRule
-syn cluster noteInline contains=noteLineBreak,noteLinkText,noteItalic,noteBold,noteCode,noteEscape,@htmlTop
+"syn cluster noteInline contains=noteLineBreak,noteLinkText,noteItalic,noteBold,noteCode,noteEscape,@htmlTop
+syn cluster noteInline contains=noteLineBreak,noteLinkText,noteBold,noteCode,noteEscape,@htmlTop
 
 syn match noteH1 ".\+\n=\+$" contained contains=@noteInline,noteHeadingRule
 syn match noteH2 ".\+\n-\+$" contained contains=@noteInline,noteHeadingRule
@@ -63,12 +64,12 @@ syn region noteLink matchgroup=noteLinkDelimiter start="(" end=")" contains=note
 syn region noteId matchgroup=noteIdDelimiter start="\[" end="\]" keepend contained
 syn region noteAutomaticLink matchgroup=noteUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 
-syn region noteItalic start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" keepend contains=noteLineStart
-syn region noteItalic start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contains=noteLineStart
+"syn region noteItalic start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" keepend contains=noteLineStart
+"syn region noteItalic start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contains=noteLineStart
 syn region noteBold start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contains=noteLineStart
 syn region noteBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=noteLineStart
-syn region noteBoldItalic start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=noteLineStart
-syn region noteBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=noteLineStart
+"syn region noteBoldItalic start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=noteLineStart
+"syn region noteBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=noteLineStart
 syn region noteCode matchgroup=noteCodeDelimiter start="`" end="`" transparent keepend contains=noteLineStart
 syn region noteCode matchgroup=noteCodeDelimiter start="`` \=" end=" \=``" keepend contains=noteLineStart
 
