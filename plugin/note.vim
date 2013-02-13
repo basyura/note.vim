@@ -6,6 +6,17 @@ function s:note_settings()
   set filetype=note
   " autocmd BufReadPost *.mn call s:open_outline()
   nnoremap <silent> <buffer> <C-a> :call unite#sources#note_action#start()<CR>
+  nnoremap <silent> <buffer> <Enter> :call <SID>open_browser()<CR>
+endfunction
+
+function! s:open_browser()
+  " todo
+  let word = getline('.')
+  let matched = matchlist(word, 'https\?://[0-9A-Za-z_#?~=\-+%\.\/:]\+')
+  if len(matched) != 0
+    execute "OpenBrowser " . matched[0]
+    return
+  endif
 endfunction
 
 function! s:open_outline()
