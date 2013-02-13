@@ -11,11 +11,12 @@ function! s:source.gather_candidates(args, context)
   for val in s:find_pages(source)
     let word = s:padding(val.name, 50) . ' ' . s:padding(val.date, 12) . join(val.tags, ', ')
     let candidate = {
-        \ "word"          : word ,
-        \ "source"        : "note",
-        \ "kind"          : "file" ,
-        \ "action__path"  : val.path ,
-        \ "source__ftime" : getftime(val.path)
+        \ "word"              : word ,
+        \ "source"            : "note",
+        \ "kind"              : "file" ,
+        \ "action__path"      : val.path ,
+        \ "action__directory" : fnamemodify(val.path, ":h") ,
+        \ "source__ftime"     : getftime(val.path)
         \ }
     call add(ret, candidate)
   endfor
@@ -30,10 +31,11 @@ function! s:source.change_candidates(args, context)
   let path = expand(note#data_path() . '/' . page . '.mn' , ':p')
   if page != '' && !filereadable(path)
     return [{
-          \ 'abbr'         : '[new page] ' . page ,
-          \ 'word'         : page   ,
-          \ "source"       : "note" ,
-          \ "action__path" : path   ,
+          \ 'abbr'              : '[new page] ' . page ,
+          \ 'word'              : page   ,
+          \ "source"            : "note" ,
+          \ "action__path"      : path   ,
+          \ "action__directory" : fnamemodify(path, ":h") ,
           \ }]
   else
     return []
