@@ -88,7 +88,7 @@ hi def link noteListMarker            htmlTagName
 hi def link noteBlockquote            Comment
 hi def link noteRule                  PreProc
 
-hi def      noteLinkText              guifg=blue
+hi def      noteLinkText              guifg=blue gui=underline
 hi def link noteIdDeclaration         Typedef
 hi def link noteId                    Type
 hi def link noteAutomaticLink         noteUrl
@@ -117,6 +117,7 @@ hi def link noteEscape                Special
   hi noteHeadingDelimiter  guifg=brown
   hi noteCodeBlock         guifg=#2c694a
 
+  hi noteLinkTextDelimiter guifg=bg
 
 syntax match note_star "★"
 syntax match note_strong "\*\*.\{-1,}\*\*" contains=note_strong_mark
