@@ -53,14 +53,14 @@ syn match noteRule "- *- *-[ -]*$" contained
 syn match noteLineBreak "\s\{2,\}$"
 
 syn region noteIdDeclaration matchgroup=noteLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=noteUrl skipwhite
-syn match noteUrl "\S\+" nextgroup=noteUrlTitle skipwhite contained
-syn region noteUrl matchgroup=noteUrlDelimiter start="<" end=">" oneline keepend nextgroup=noteUrlTitle skipwhite contained
+syn match noteUrl "\S\+" nextgroup=noteUrlTitle skipwhite contained conceal
+syn region noteUrl matchgroup=noteUrlDelimiter start="<" end=">" oneline keepend nextgroup=noteUrlTitle skipwhite contained conceal
 syn region noteUrlTitle matchgroup=noteUrlTitleDelimiter start=+"+ end=+"+ keepend contained
 syn region noteUrlTitle matchgroup=noteUrlTitleDelimiter start=+'+ end=+'+ keepend contained
 syn region noteUrlTitle matchgroup=noteUrlTitleDelimiter start=+(+ end=+)+ keepend contained
 
 syn region noteLinkText matchgroup=noteLinkTextDelimiter start="!\=\[\%(\_[^]]*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" keepend nextgroup=noteLink,noteId skipwhite contains=@noteInline,noteLineStart
-syn region noteLink matchgroup=noteLinkDelimiter start="(" end=")" contains=noteUrl keepend contained
+syn region noteLink matchgroup=noteLinkDelimiter start="(" end=")" contains=noteUrl keepend contained conceal
 syn region noteId matchgroup=noteIdDelimiter start="\[" end="\]" keepend contained
 syn region noteAutomaticLink matchgroup=noteUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 
@@ -88,7 +88,7 @@ hi def link noteListMarker            htmlTagName
 hi def link noteBlockquote            Comment
 hi def link noteRule                  PreProc
 
-hi def link noteLinkText              htmlLink
+hi def      noteLinkText              guifg=blue
 hi def link noteIdDeclaration         Typedef
 hi def link noteId                    Type
 hi def link noteAutomaticLink         noteUrl
