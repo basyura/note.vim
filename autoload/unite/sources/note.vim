@@ -15,7 +15,7 @@ function! s:source.gather_candidates(args, context)
         \ "source"            : "note",
         \ "kind"              : "file" ,
         \ "action__path"      : val.path ,
-        \ "action__directory" : fnamemodify(val.path, ":h") ,
+        \ "action__directory" : fnamemodify(val.path, ":h") . '/.' ,
         \ "source__ftime"     : getftime(val.path)
         \ }
     call add(ret, candidate)
@@ -29,13 +29,16 @@ endfunction
 function! s:source.change_candidates(args, context)
   let page = substitute(a:context.input, '\*', '', 'g')
   let path = expand(note#data_path() . '/' . page . '.mn' , ':p')
+  if a:context.source.name == 'note/archive'
+    return []
+  endif
   if page != '' && !filereadable(path)
     return [{
           \ 'abbr'              : '[new page] ' . page ,
           \ 'word'              : page   ,
           \ "source"            : "note" ,
           \ "action__path"      : path   ,
-          \ "action__directory" : fnamemodify(path, ":h") ,
+          \ "action__directory" : fnamemodify(path, ":h") . '/.',
           \ }]
   else
     return []
