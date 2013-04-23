@@ -1,4 +1,7 @@
 
+let g:note_unite_title_width = 100
+
+
 " ftdetect ?
 au BufRead,BufNewFile *.mn :call s:note_settings()
 
