@@ -6,9 +6,16 @@ let s:source = {
 \ }
 " create list
 function! s:source.gather_candidates(args, context)
-  let source = a:context.source.name
+  " avoid duplicate candidates
+  if a:context.is_redraw && a:context.source.name == 'note/archive'
+    return []
+  end
+
+  let pages = a:context.is_redraw ? s:all_pages() : s:find_pages(a:context.source.name)
+
   let ret = []
-  for val in s:find_pages(source)
+
+  for val in pages
     let word = s:padding(val.name, g:note_unite_title_width) . ' ' . s:padding(val.date, 12) . join(val.tags, ', ')
     let candidate = {
         \ "word"              : word ,
@@ -93,6 +100,19 @@ endfunction
 "
 function! s:find_pages(source)
   let list = map(note#list(a:source), '{
+          \ "name" : fnamemodify(v:val , ":t:r") ,
+          \ "path" : v:val
+          \ }')
+  for page in list
+    call extend(page, note#attributes(page.path))
+  endfor
+  return list
+endfunction
+"
+"
+"
+function! s:all_pages()
+  let list = map(note#all_list(), '{
           \ "name" : fnamemodify(v:val , ":t:r") ,
           \ "path" : v:val
           \ }')

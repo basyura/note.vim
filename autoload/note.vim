@@ -14,6 +14,12 @@ function! note#list(...)
   return list
 endfunction
 
+function! note#all_list()
+  let list1 = note#list()
+  let list2 = note#list('note/archive')
+  return extend(list1, list2)
+endfunction
+
 function! note#all_tags()
   let tags = {}
   for file in note#list()
