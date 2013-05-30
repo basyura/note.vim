@@ -43,7 +43,7 @@ function! s:outline_info.create_heading(which, heading_line, matched_line, conte
     if a:heading_line =~ '^\s\=★.\='
       let heading.level = 4
     else
-      let heading.level = strlen(matchstr(a:heading_line, '^#\+'))
+      let heading.level = strlen(matchstr(a:heading_line, '^#\+')) + 1
       let heading.word = substitute(heading.word, '^#\+\s*', '', '')
       let heading.word = substitute(heading.word, '\s*#\+\s*$', '', '')
     endif
