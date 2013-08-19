@@ -70,8 +70,13 @@ syn region noteBold start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" ke
 syn region noteBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=noteLineStart
 "syn region noteBoldItalic start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=noteLineStart
 "syn region noteBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=noteLineStart
-syn region noteCode matchgroup=noteCodeDelimiter start="`" end="`" transparent keepend contains=noteLineStart
-syn region noteCode matchgroup=noteCodeDelimiter start="`` \=" end=" \=``" keepend contains=noteLineStart
+"
+"
+"
+syn match noteIgnore		"." contained conceal
+syn region noteCodeBlock	matchgroup=noteIgnore start=" >$" start="^>$" end="^[^ \t]"me=e-1 end="^<" concealends
+"syn region noteCode matchgroup=noteIgnore start="`" end="`" concealends
+syn region noteCode start="`" end="`" concealends
 
 syn match noteEscape "\\[][\\`*_{}()#+.!-]"
 
@@ -116,6 +121,7 @@ hi def link noteEscape                Special
   hi noteListMarker        guifg=blue
   hi noteHeadingDelimiter  guifg=brown
   hi noteCodeBlock         guifg=#2c694a
+  hi noteCode              guifg=#2c694a
 
   hi noteLinkTextDelimiter guifg=bg
 
