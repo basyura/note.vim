@@ -41,7 +41,7 @@ syn region noteH6 matchgroup=noteHeadingDelimiter start="#######\@!" end="#*\s*$
 
 syn match noteBlockquote ">\s" contained nextgroup=@noteBlock
 
-syn region noteCodeBlock start="      \|\t" end="$" contained
+"syn region noteCodeBlock start="      \|\t" end="$" contained
 
 " TODO: real nesting
 syn match noteListMarker " \{0,6\}[-*+]\%(\s\+\S\)\@=" contained
