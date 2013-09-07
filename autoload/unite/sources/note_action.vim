@@ -69,7 +69,11 @@ function! s:archive_action(candidate)
   let  path = archive_dir . "/" . expand("%")
   call writefile(readfile(expand("%")), path)
   call delete(a:candidate.action__path)
-  bd
+  if exists(':Kwbd') > 0
+    :Kwbd
+  else
+    bd
+  endif
   echohl ErrorMsg | echo 'archived ... ' . fnamemodify(path, ':t:r')  | echohl None
 endfunction
 "
@@ -83,7 +87,11 @@ function! s:restore_action(candidate)
   endif
   call writefile(readfile(expand("%")), path)
   call delete(a:candidate.action__path)
-  bd
+  if exists(':Kwbd') > 0
+    :Kwbd
+  else
+    bd
+  endif
   edit `=path`
   redraw
   echohl ErrorMsg | echo 'restored ... ' . fnamemodify(path, ':t:r')  | echohl None
@@ -99,7 +107,11 @@ function! s:rename_action(candidate)
     return
   endif
   call rename(expand("%"), fname)
-  bd
+  if exists(':Kwbd') > 0
+    :Kwbd
+  else
+    bd
+  endif
   execute 'open ' . fname
   redraw
   echohl ErrorMsg | echo 'saved as ... ' . fname  | echohl None
@@ -116,6 +128,10 @@ function! s:delete_action(candidate)
     return
   endif
   call delete(path)
-  bd
+  if exists(':Kwbd') > 0
+    :Kwbd
+  else
+    bd
+  endif
   echohl ErrorMsg | echo 'deleted ... ' . fnamemodify(path, ':t:r')  | echohl None
 endfunction
