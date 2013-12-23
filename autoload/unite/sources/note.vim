@@ -56,7 +56,8 @@ let s:source.action_table.execute = {'description' : 'create new note'}
 function! s:source.action_table.execute.func(candidate)
   silent edit  `=a:candidate.action__path`
   call append(0, [
-        \'# ' . a:candidate.word,
+        \ a:candidate.word,
+        \ s:padding('', strdisplaywidth(a:candidate.word), '='),
         \'date : ' . strftime('%Y-%m-%d'),
         \'tags : ',
         \ ])
@@ -123,10 +124,11 @@ function! s:all_pages()
 endfunction
 
 
-function! s:padding(msg, len)
-  let msg = a:msg
+function! s:padding(msg, len, ...)
+  let msg  = a:msg
+  let char = a:0 ? a:1 : ' '
   while strdisplaywidth(msg) < a:len
-    let msg .= ' '
+    let msg .= char
   endwhile
   return msg
 endfunction
