@@ -114,16 +114,6 @@ hi def link noteEscape                Special
 "                    original                        "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
-  hi noteH1                guifg=brown
-  hi noteH2                guifg=brown
-  hi noteH3                guifg=brown
-  hi noteRule              guifg=brown
-  hi noteListMarker        guifg=blue
-  hi noteHeadingDelimiter  guifg=brown
-  hi noteCodeBlock         guifg=#2c694a
-  hi noteCode              guifg=#2c694a
-
-  hi noteLinkTextDelimiter guifg=bg
 
 syntax match note_star "★"
 syntax match note_strong "\*\*.\{-1,}\*\*" contains=note_strong_mark
@@ -133,10 +123,20 @@ syntax match note_strong_mark /\*\*/ contained conceal
 syntax match note_highlight "##[^\#]\+##" contains=note_highlight_mark
 syntax match note_highlight_mark /\#/ contained conceal
 
-highlight note_strong guifg=red
-highlight note_star  guifg=#ff9be8
 
-highlight note_highlight guibg=#d3d47a
+
+hi def noteH1                guifg=brown
+hi def noteH2                guifg=brown
+hi def noteH3                guifg=brown
+hi def noteRule              guifg=brown
+hi def noteListMarker        guifg=blue
+hi def noteHeadingDelimiter  guifg=brown
+hi def noteCodeBlock         guifg=#2c694a
+hi def noteCode              guifg=#2c694a
+hi def noteLinkTextDelimiter guifg=bg
+hi def note_strong           guifg=red
+hi def note_star             guifg=#ff9be8
+hi def note_highlight        guibg=#d3d47a
 
 
 let b:current_syntax = 'note'
